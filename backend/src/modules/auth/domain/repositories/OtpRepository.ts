@@ -1,4 +1,4 @@
-  import Otp  from "../entities/Otp";
+  import Otp  from "../entities/Otp.js";
 
   export default interface OtpRepository{
     save(otp:Otp):Promise<void>

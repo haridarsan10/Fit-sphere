@@ -1,6 +1,6 @@
-import GymOwner from "../../domain/entities/GymOwner";
-import GymOwnerRepository from "../../domain/repositories/GymOwnerRepository";
-import PasswordHasher from "../../../auth/application/services/PasswordHasher";
+import GymOwner from "../../domain/entities/GymOwner.js";
+import type GymOwnerRepository from "../../domain/repositories/GymOwnerRepository.js";
+import type PasswordHasher from "../../../auth/application/services/PasswordHasher.js";
 import { v4 as uuidv4 } from "uuid";
 
 type RegisterGymOwnerInput = {
@@ -35,7 +35,7 @@ export default class RegisterGymOwner {
       status: "PENDING",
     });
 
-    await this.gymOwnerRepository.save(owner);
+    await this.gymOwnerRepository.create(owner);
 
     return {
       message: "Gym owner registered successfully.",

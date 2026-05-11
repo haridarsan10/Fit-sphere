@@ -1,6 +1,6 @@
-import GymOwnerRepository from "../../domain/repositories/GymOwnerRepository";
-import PasswordHasher from "../../../auth/application/services/PasswordHasher"
-import TokenService from "../../../auth/application/services/TokenService";
+import type GymOwnerRepository from "../../domain/repositories/GymOwnerRepository.js";
+import type PasswordHasher from "../../../auth/application/services/PasswordHasher.js"
+import type TokenService from "../../../auth/application/services/TokenService.js";
 
 type LoginInput={
   email:string

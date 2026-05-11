@@ -1,4 +1,4 @@
-import OtpGenerator from "../../modules/auth/application/services/OtpGenerator";
+import type OtpGenerator from "../../modules/auth/application/services/OtpGenerator.js";
 
 export default class OtpGeneratorService implements OtpGenerator{
   generate():string {

@@ -1,6 +1,6 @@
-import Otp from "../domain/entities/Otp";
-import OtpRepository from "../domain/repositories/OtpRepository";
-import OtpModel from "../../../infrastructure/database/models/OtpModel";
+import Otp from "../domain/entities/Otp.js";
+import type OtpRepository from "../domain/repositories/OtpRepository.js";
+import OtpModel from "../../../infrastructure/database/models/OtpModel.js";
 
 export default class MongoOtpRepository implements OtpRepository{
   async findByOwnerId(ownerId: string): Promise<Otp | null> {

@@ -1,8 +1,8 @@
-import OtpRepository from "../../domain/repositories/OtpRepository"
-import GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository"
-import Otp from "../../domain/entities/Otp"
-import OtpGenerator from "../services/OtpGenerator";
-import OtpService from "../services/OtpService";
+import type OtpRepository from "../../domain/repositories/OtpRepository.js"
+import type GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository.js"
+import Otp from "../../domain/entities/Otp.js"
+import type OtpGenerator from "../services/OtpGenerator.js";
+import type OtpService from "../services/OtpService.js";
 import { v4 as uuidv4 } from "uuid";
 
 

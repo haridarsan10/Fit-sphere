@@ -1,5 +1,5 @@
-import LoginGymOwner from '../../application/use-cases/LoginGymOwner'
-import RegisterGymOwner from '../../application/use-cases/RegisterGymOwner'
+import LoginGymOwner from '../../application/use-cases/LoginGymOwner.js'
+import RegisterGymOwner from '../../application/use-cases/RegisterGymOwner.js'
 
 export default class GymOwnerController{
   constructor(

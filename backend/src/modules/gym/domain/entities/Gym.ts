@@ -1,5 +1,23 @@
 export type GymStatus="PENDING"|"ACTIVE"|'SUSPENDED'|'REJECTED';
 
+export interface GymProps {
+  id: string
+  name: string
+  description: string
+  address: string
+  contact_phone: string
+  email: string
+  owner_id: string
+  status?: GymStatus
+  reject_reason?: string
+  max_members: number
+  max_trainers: number
+  created_at?: Date
+  updated_at?: Date
+  deleted_at?: Date
+}
+
+
 export default class Gym{
   public readonly id:string;
   public name:string;
@@ -43,7 +61,7 @@ export default class Gym{
     this.reject_reason=params.reject_reason ?? null
     this.max_members=params.max_members
     this.max_trainers=params.max_trainers
-    this.created_at=new Date()
+    this.created_at=params.created_at ?? new Date()
     this.updated_at=params.updated_at??null
     this.deleted_at=params.deleted_at??null
   }

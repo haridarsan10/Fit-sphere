@@ -1,4 +1,4 @@
-import AddGym from "../../application/use-cases/AddGym";
+import AddGym from "../../application/use-cases/AddGym.js";
 
 export default class GymController{
   constructor(

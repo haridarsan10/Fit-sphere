@@ -1,6 +1,6 @@
-import Gym from "../domain/entities/Gym";
-import GymRepository from "../domain/repositories/GymRepository"; 
-import GymModel from "../../../infrastructure/database/models/GymModel";
+import Gym,{type GymProps} from "../domain/entities/Gym.js";
+import type GymRepository from "../domain/repositories/GymRepository.js"; 
+import GymModel from "../../../infrastructure/database/models/GymModel.js";
 
 export default class MongoGymRepository implements GymRepository{
   async findById(gymId: string): Promise<Gym | null> {
@@ -8,7 +8,8 @@ export default class MongoGymRepository implements GymRepository{
 
     if(!doc) return null
 
-    return new Gym({
+
+    const gymData:GymProps={
       id:doc._id.toString(),
       name:doc.name,
       description:doc.description,
@@ -20,10 +21,19 @@ export default class MongoGymRepository implements GymRepository{
       reject_reason:doc.reject_reason,
       max_members:doc.max_members,
       max_trainers:doc.max_trainers,
-      created_at:doc.created_at,
-      updated_at: doc.updated_at?new Date(doc.updated_at):undefined,
-      deleted_at: doc.deleted_at?new Date(doc.deleted_at):undefined
-    })
+      created_at:doc.created_at
+    } 
+
+    if (doc.updated_at) {
+      gymData.updated_at = new Date(doc.updated_at)
+    }
+
+    if (doc.deleted_at) {
+      gymData.deleted_at = new Date(doc.deleted_at)
+    }
+
+    return new Gym(gymData)
+
   }
 
   async save(gym: Gym): Promise<void> {

@@ -1,6 +1,6 @@
-import GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository";
-import Gym from "../../domain/entities/Gym";
-import GymRepository from "../../domain/repositories/GymRepository";
+import type GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository.js";
+import Gym from "../../domain/entities/Gym.js";
+import type GymRepository from "../../domain/repositories/GymRepository.js";
 import { v4 as uuidv4 } from "uuid";
 
 type AddGymInput = {

@@ -1,4 +1,4 @@
-import OtpService from "../../modules/auth/application/services/OtpService";
+import type OtpService from "../../modules/auth/application/services/OtpService.js";
 import nodemailer from 'nodemailer'
 
 export default class EmailOtpService implements OtpService{

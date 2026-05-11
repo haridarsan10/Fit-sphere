@@ -1,4 +1,4 @@
-import Gym from "../entities/Gym";
+import Gym from "../entities/Gym.js";
 
 export default interface GymRepository{
   save(gym:Gym):Promise<void>

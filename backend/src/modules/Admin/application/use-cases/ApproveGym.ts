@@ -1,4 +1,4 @@
-import GymRepository from "../../../gym/domain/repositories/GymRepository"
+import type GymRepository from "../../../gym/domain/repositories/GymRepository.js"
 
 type ApproveGymInput={
   gymId:string

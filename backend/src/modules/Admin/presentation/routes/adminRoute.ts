@@ -1,6 +1,6 @@
 import express from "express"
-import authMiddleware from "../../../auth/presentation/middleware/authMiddleware"
-import authRoleMiddleware from "../../../auth/presentation/middleware/authRoleMiddleware"
+import authMiddleware from "../../../auth/presentation/middleware/authMiddleware.js"
+import authRoleMiddleware from "../../../auth/presentation/middleware/authRoleMiddleware.js"
 
 export default function adminRoute(adminController:any){
   const router=express.Router()

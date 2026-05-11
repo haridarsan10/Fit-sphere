@@ -1,5 +1,5 @@
-import GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository"
-import OtpRepository from "../../domain/repositories/OtpRepository"
+import type GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository.js"
+import type OtpRepository from "../../domain/repositories/OtpRepository.js"
 
 type VerifyOtpInput={
   email:string,
@@ -31,7 +31,7 @@ export default class VerifyOtp{
 
     user.activate()
 
-    await this.gymOwnerRepository.save(user)
+    await this.gymOwnerRepository.create(user)
     await this.otpRepository.deleteByOwnerId(user.id)
   }
 }

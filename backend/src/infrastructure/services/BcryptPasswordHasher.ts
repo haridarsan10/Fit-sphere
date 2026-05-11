@@ -1,4 +1,4 @@
-import PasswordHasher from "../../modules/auth/application/services/PasswordHasher";
+import type PasswordHasher from "../../modules/auth/application/services/PasswordHasher.js";
 import bcrypt from "bcrypt"
 
 export default class BcryptPasswordHasher implements PasswordHasher{

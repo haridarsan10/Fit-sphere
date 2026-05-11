@@ -1,4 +1,4 @@
-import ApproveGym from "../../application/use-cases/ApproveGym";
+import ApproveGym from "../../application/use-cases/ApproveGym.js";
 
 export default class adminController{
   constructor(

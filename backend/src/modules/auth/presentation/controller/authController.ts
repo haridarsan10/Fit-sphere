@@ -1,5 +1,5 @@
-import SendOtp from '../../../auth/application/use-cases/SendOtp'
-import VerifyOtp from '../../../auth/application/use-cases/VerifyOtp'
+import SendOtp from '../../../auth/application/use-cases/SendOtp.js'
+import VerifyOtp from '../../../auth/application/use-cases/VerifyOtp.js'
 
 
 export default class authController{
@@ -7,6 +7,8 @@ export default class authController{
     private sendOtpCase:SendOtp,
     private verifyOtpCase:VerifyOtp
   ){}
+
+  
 
   async sendOtp(req:any,res:any){
     try {

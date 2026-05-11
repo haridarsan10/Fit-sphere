@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express"
-import TokenService from "../../application/services/TokenService"
+import type { Request, Response, NextFunction } from "express"
+import type TokenService from "../../application/services/TokenService.js"
 
 export default function authMiddleware(tokenService: TokenService) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -18,6 +18,10 @@ export default function authMiddleware(tokenService: TokenService) {
 
       const token = parts[1]
 
+      if(!token){
+        throw new Error("Unauthorized")
+      }
+      
       const decoded = tokenService.verifyToken(token)
 
       ;(req as any).user = decoded
