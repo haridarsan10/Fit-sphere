@@ -4,6 +4,7 @@ import { Controller,useForm } from "react-hook-form";
 import type { RegisterFormData} from "../schemas/registerSchema";
 import { registerSchema } from "../schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import '../styles/RegisterPage.css'
 
 import {
   Card,
@@ -32,8 +33,9 @@ export default function RegisterPage(){
 
   const {mutate,isPending}=useRegister()
 
-  const {register,handleSubmit,control}=useForm<RegisterFormData>({
-    resolver:zodResolver(registerSchema)  
+  const {register,handleSubmit,control,formState:{errors}}=useForm<RegisterFormData>({
+    defaultValues:{role:'User'},
+    resolver:zodResolver(registerSchema)
   })
 
   const onSubmit=(data:RegisterFormData)=>{
@@ -56,12 +58,26 @@ export default function RegisterPage(){
           <div className="flex flex-col gap-6">
     
             <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Firstname</Label>
               <Input
-                {...register("name")}
+                {...register("firstName")}
                 id="name"
               />
+              {errors.firstName && (
+                <p  className="errorMessage">{errors.firstName.message}</p>
+              )}
             </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="name">Lastname</Label>
+              <Input
+                {...register("lastName")}
+                id="name"
+              />
+              {errors.lastName && (
+                <p  className="errorMessage">{errors.lastName.message}</p>
+              )}
+            </div>  
 
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -69,8 +85,11 @@ export default function RegisterPage(){
                 {...register('email')}
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="user@example.com"
               />
+              {errors.email && (
+                <p className="errorMessage">{errors.email.message}</p>
+              )}
             </div>
 
             <div className="grid gap-2">
@@ -78,6 +97,9 @@ export default function RegisterPage(){
                 <Label htmlFor="password">Password</Label>
               </div>
               <Input {...register('password')} id="password" type="password" />
+              {errors.password && (
+                <p className="errorMessage">{errors.password.message}</p>
+              )}
             </div>
 
              <div className="grid gap-2">
@@ -85,6 +107,9 @@ export default function RegisterPage(){
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
               </div>
               <Input {...register('confirmPassword')} id="confirmPassword" type="password" />
+              {errors.confirmPassword && (
+                <p  className="errorMessage">{errors.confirmPassword.message}</p>
+              )}
             </div>
 
             <div>

@@ -1,14 +1,14 @@
-export type UserStatus= "PENDING" | "ACTIVE" | "APPROVED";
+export type AccountStatus= "PENDING" | "ACTIVE" | "APPROVED";
+export type Role="User" | "Trainer" | "Gymowner"
 
-
-export default class User{
+export default class Account{
     public readonly id: string;
     public firstName: string;
     public lastName: string;
     public email: string;
     public password: string;
-    public phoneNumber: string;
-    public status: UserStatus;
+    public status: AccountStatus;
+    public role:Role
 
 
   constructor(params:{
@@ -17,16 +17,16 @@ export default class User{
     lastName:string,
     email:string,
     password:string,
-    phoneNumber:string,
-    status?:UserStatus
+    status?:AccountStatus
+    role:Role
   }){
     this.id=params.id,
     this.firstName=params.firstName,
     this.lastName=params.lastName,
     this.email=params.email,
     this.password=params.password,
-    this.phoneNumber=params.phoneNumber,
     this.status=params.status??"PENDING"
+    this.role=params.role
   }
 
   public activate() {

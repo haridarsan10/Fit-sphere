@@ -7,10 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 export const useRegister=()=>{
   return useMutation({
     mutationFn:register,
-    onSuccess:()=>{
+    onSuccess:(data)=>{
+      console.log("SUCCESS:",data)
       toast.success('Registration successfull')
     },
-    onError:()=>{
+    onError:(error)=>{
+      console.log("ERROR:", error)
       toast.error('Something went wrong!')
     }
   })

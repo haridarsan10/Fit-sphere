@@ -1,39 +1,55 @@
 import SendOtp from '../../../auth/application/use-cases/SendOtp.js'
 import VerifyOtp from '../../../auth/application/use-cases/VerifyOtp.js'
-
+import Register from '../../application/use-cases/Register.js'
 
 export default class authController{
   constructor(
-    private sendOtpCase:SendOtp,
-    private verifyOtpCase:VerifyOtp
+    // private sendOtpCase:SendOtp,
+    // private verifyOtpCase:VerifyOtp,
+    private registerCase:Register
   ){}
 
-  
+  async register(req:any,res:any){
+   try {
 
-  async sendOtp(req:any,res:any){
-    try {
+    const {firstName,lastName,email,password,confirmPassword,role}=req.body
 
-      const {email}=req.body
+    const result=await this.registerCase.execute({firstName,lastName,email,password,confirmPassword,role})
 
-      const result=await this.sendOtpCase.execute(email)
+    console.log(result)
 
-      return res.status(200).json(result)
+    return res.status(201).json(result)
+
+   } catch (error:any) {
+    return res.status(400).json({message:error.message})
+   }
+    
+  }
+
+  // async sendOtp(req:any,res:any){
+  //   try {
+
+  //     const {email}=req.body
+
+  //     const result=await this.sendOtpCase.execute(email)
+
+  //     return res.status(200).json(result)
       
-    } catch (error:any) {
-      return res.status(400).json({message:error.message})
-    }
-  }
+  //   } catch (error:any) {
+  //     return res.status(400).json({message:error.message})
+  //   }
+  // }
 
-  async verifyOtp(req:any,res:any){
-    try {
-      const {email,otp}=req.body
+  // async verifyOtp(req:any,res:any){
+  //   try {
+  //     const {email,otp}=req.body
 
-      const result=await this.verifyOtpCase.execute({email,otp})
+  //     const result=await this.verifyOtpCase.execute({email,otp})
 
-      return res.status(200).json(result)
+  //     return res.status(200).json(result)
 
-    } catch (error:any) {
-      return res.status(400).json({message:error.message})
-    }
-  }
+  //   } catch (error:any) {
+  //     return res.status(400).json({message:error.message})
+  //   }
+  // }
 }

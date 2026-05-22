@@ -1,10 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
-const TrainerSchema=new Schema({
-  firstname:{
+const AccountSchema=new Schema({
+  id:{
     type:String,required:true
   },
-  lastname:{
+  firstName:{
+    type:String,required:true
+  },
+  lastName:{
     type:String,required:true
   },
   email:{
@@ -13,14 +16,14 @@ const TrainerSchema=new Schema({
   password:{
     type:String,required:true
   },
-  phonenumber:{
-    type:String,required:true,unique:true
-  },
   status:{
     type:String,enum:["PENDING", "ACTIVE","APPROVED"],default:"PENDING"
+  },
+  role:{
+    type:String,enum:['User','Gymowner','Trainer']
   }
 })
 
-const Trainer=mongoose.model('User',TrainerSchema)
+const AccountModel=mongoose.model('User',AccountSchema)
 
-export default Trainer
+export default AccountModel
