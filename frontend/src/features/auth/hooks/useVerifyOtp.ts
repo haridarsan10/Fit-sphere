@@ -1,26 +1,21 @@
 import { useMutation } from "@tanstack/react-query"
-import { register } from "../api/register"
+import { verifyotp } from "../api/verifyotp"
 import type { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "@tanstack/react-router";
+ 
 
 
-export const useRegister=()=>{
-
-  const navigate=useNavigate()
-
+export const useVerifyOtp=()=>{
   return useMutation({
-    mutationFn:register,
+    mutationFn:verifyotp,
     onSuccess:(data)=>{
       console.log("SUCCESS:",data)
-      toast.success('Registration successfull')
-      navigate({ to: '/verify-otp' })
+      toast.success('Otp verification successfull')
     },
-    onError:(error: AxiosError<any>)=>{
+    onError:(error:AxiosError<any>)=>{
       const message =error?.response?.data?.message || "Something went wrong"
       toast.error(message)
-
     }
   })
 }

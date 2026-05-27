@@ -1,6 +1,7 @@
 import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
 import LoginPage from "../../features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
+import { VerifyOtpPage } from "@/features/auth/pages/VerifyOtpPage";
 
 const rootRoute=createRootRoute()
 
@@ -16,7 +17,13 @@ const registerRoute=createRoute({
   component:RegisterPage
 })
 
+const verifyOtpRoute=createRoute({
+  getParentRoute:()=>rootRoute,
+  path:'/verify-otp',
+  component:VerifyOtpPage
+})
 
-const routeTree=rootRoute.addChildren([loginRoute,registerRoute])
+
+const routeTree=rootRoute.addChildren([loginRoute,registerRoute,verifyOtpRoute])
 
 export const router=createRouter({routeTree})

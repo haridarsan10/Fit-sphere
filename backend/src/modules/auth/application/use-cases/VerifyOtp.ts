@@ -1,4 +1,4 @@
-import type GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository.js"
+import type AccountRepository from "../../domain/repositories/AccountRepository.js"
 import type OtpRepository from "../../domain/repositories/OtpRepository.js"
 
 type VerifyOtpInput={
@@ -8,12 +8,12 @@ type VerifyOtpInput={
 
 export default class VerifyOtp{
   constructor(
-    private gymOwnerRepository:GymOwnerRepository,
+    private accountRepository:AccountRepository,
     private otpRepository:OtpRepository
   ){}
 
   async execute(data:VerifyOtpInput){
-    const user=await this.gymOwnerRepository.findByEmail(data.email)
+    const user=await this.accountRepository.findByEmail(data.email)
 
     if(!user){
       throw new Error('User not found!')
@@ -30,8 +30,11 @@ export default class VerifyOtp{
     }
 
     user.activate()
-
-    await this.gymOwnerRepository.create(user)
     await this.otpRepository.deleteByOwnerId(user.id)
+
+     return {
+      success:true,
+      message:"User verified successfully"
+    }
   }
 }

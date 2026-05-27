@@ -35,9 +35,6 @@ export default class MongoAccountRepository implements AccountRepository{
 
   async create(user: Account): Promise<Account | null> {
     try {
-      
-    console.log('Hi hello')
-
     const createUser=await AccountModel.create({
       id:user.id,
       firstName:user.firstName,
@@ -48,14 +45,9 @@ export default class MongoAccountRepository implements AccountRepository{
       role:user.role
     })
 
-    console.log(createUser)
-
-     console.log('Hi hello')
-
     return this.toDomain(createUser)
 
     } catch (error) {
-      console.log(error)
       throw error
     }
   }

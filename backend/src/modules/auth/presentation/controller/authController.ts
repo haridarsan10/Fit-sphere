@@ -16,8 +16,6 @@ export default class authController{
 
     const result=await this.registerCase.execute({firstName,lastName,email,password,confirmPassword,role})
 
-    console.log(result)
-
     return res.status(201).json(result)
 
    } catch (error:any) {

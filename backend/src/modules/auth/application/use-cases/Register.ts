@@ -30,7 +30,6 @@ export default class Register{
 
     const hashedPassword=await this.passHasher.hash(data.password)
 
-    console.log(hashedPassword)
 
     const account=new Account({
       id: uuidv4(),
@@ -43,8 +42,6 @@ export default class Register{
 
 
     await this.accountRepository.create(account)
-
-    console.log('Saved to DB')
 
     return {
       success:true,
