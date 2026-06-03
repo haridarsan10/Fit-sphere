@@ -29,7 +29,7 @@ export default class Account{
     this.role=params.role
   }
 
-  public activate() {
+  public activate(){
     this.status = "ACTIVE";
   }
 

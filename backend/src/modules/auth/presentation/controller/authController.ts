@@ -1,11 +1,9 @@
-import SendOtp from '../../../auth/application/use-cases/SendOtp.js'
 import VerifyOtp from '../../../auth/application/use-cases/VerifyOtp.js'
 import Register from '../../application/use-cases/Register.js'
 
 export default class authController{
   constructor(
-    // private sendOtpCase:SendOtp,
-    // private verifyOtpCase:VerifyOtp,
+    private verifyOtpCase:VerifyOtp,
     private registerCase:Register
   ){}
 
@@ -14,7 +12,9 @@ export default class authController{
 
     const {firstName,lastName,email,password,confirmPassword,role}=req.body
 
+
     const result=await this.registerCase.execute({firstName,lastName,email,password,confirmPassword,role})
+
 
     return res.status(201).json(result)
 
@@ -24,30 +24,19 @@ export default class authController{
     
   }
 
-  // async sendOtp(req:any,res:any){
-  //   try {
 
-  //     const {email}=req.body
+  async verifyOtp(req:any,res:any){
+    try {
+      const {email,otp}=req.body
 
-  //     const result=await this.sendOtpCase.execute(email)
+      console.log(req.body)
 
-  //     return res.status(200).json(result)
-      
-  //   } catch (error:any) {
-  //     return res.status(400).json({message:error.message})
-  //   }
-  // }
+      const result=await this.verifyOtpCase.execute({email,otp})
 
-  // async verifyOtp(req:any,res:any){
-  //   try {
-  //     const {email,otp}=req.body
+      return res.status(200).json(result)
 
-  //     const result=await this.verifyOtpCase.execute({email,otp})
-
-  //     return res.status(200).json(result)
-
-  //   } catch (error:any) {
-  //     return res.status(400).json({message:error.message})
-  //   }
-  // }
+    } catch (error:any) {
+      return res.status(400).json({message:error.message})
+    }
+  }
 }

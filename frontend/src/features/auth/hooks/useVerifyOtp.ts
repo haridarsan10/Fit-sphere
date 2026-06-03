@@ -5,14 +5,17 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
  
 
-
 export const useVerifyOtp=()=>{
+
   return useMutation({
+
     mutationFn:verifyotp,
+
     onSuccess:(data)=>{
       console.log("SUCCESS:",data)
-      toast.success('Otp verification successfull')
+      toast.success('User verified successfully')
     },
+    
     onError:(error:AxiosError<any>)=>{
       const message =error?.response?.data?.message || "Something went wrong"
       toast.error(message)

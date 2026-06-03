@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const OtpSchema=new Schema({
   ownerId:{
-    type:String,required:true
+    type:String,required:true,unique:true
   },
   code:{
     type:String,required:true

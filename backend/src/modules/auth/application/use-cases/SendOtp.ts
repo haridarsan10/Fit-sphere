@@ -1,26 +1,23 @@
 import type OtpRepository from "../../domain/repositories/OtpRepository.js"
-import type GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository.js"
+import type AccountRepository from "../../domain/repositories/AccountRepository.js";
 import Otp from "../../domain/entities/Otp.js"
 import type OtpGenerator from "../services/OtpGenerator.js";
 import type OtpService from "../services/OtpService.js";
 import { v4 as uuidv4 } from "uuid";
 
 
-type SendOtpInput={
-  email:string
-}
 
 export default class SendOtp{
   constructor(
     private otpRepository:OtpRepository,
-    private gymOwnerRepository:GymOwnerRepository,
+    private accountRepository:AccountRepository,
     private otpService:OtpService,
     private otpGenerator:OtpGenerator
   ){}
   
   
-  async execute(data:SendOtpInput){
-    const user=await this.gymOwnerRepository.findByEmail(data.email)
+  async execute(data:string){
+    const user=await this.accountRepository.findByEmail(data)
 
     if(!user){
       throw new Error("User not found!");
@@ -30,6 +27,7 @@ export default class SendOtp{
       throw new Error("Account already verified");
     }
 
+    
     const existingOtp=await this.otpRepository.findByOwnerId(user.id)
 
     if(existingOtp){
@@ -38,14 +36,17 @@ export default class SendOtp{
 
     const code= this.otpGenerator.generate()
 
+
     const otp = new Otp({
-      id:uuidv4(),
       ownerId:user.id,
       code:code,
       expiresAt:new Date(Date.now() + 5 * 60 * 1000)
     })
 
+  
+
     await this.otpRepository.save(otp)
+   
     await this.otpService.send(user.email,code)
   }
 }
