@@ -27,11 +27,9 @@ export default class authController{
 
   async verifyOtp(req:any,res:any){
     try {
-      const {email,otp}=req.body
+      const {ownerId,otp}=req.body
 
-      console.log(req.body)
-
-      const result=await this.verifyOtpCase.execute({email,otp})
+      const result=await this.verifyOtpCase.execute({ownerId,otp})
 
       return res.status(200).json(result)
 

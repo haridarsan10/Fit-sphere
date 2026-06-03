@@ -2,7 +2,7 @@ import type AccountRepository from "../../domain/repositories/AccountRepository.
 import type OtpRepository from "../../domain/repositories/OtpRepository.js"
 
 type VerifyOtpInput={
-  email:string,
+  ownerId:string,
   otp:string
 }
 
@@ -13,7 +13,7 @@ export default class VerifyOtp{
   ){}
 
   async execute(data:VerifyOtpInput){
-    const user=await this.accountRepository.findByEmail(data.email)
+    const user=await this.accountRepository.findByOwnerId(data.ownerId)
 
     if(!user){
       throw new Error('User not found!')

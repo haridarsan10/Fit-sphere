@@ -33,6 +33,15 @@ export default class MongoAccountRepository implements AccountRepository{
     return this.toDomain(doc)
   }
 
+   async findByOwnerId(id: string): Promise<Account | null> {
+    const doc=await AccountModel.findOne({id})
+
+    if(!doc) return null
+
+    return this.toDomain(doc)
+  }
+  
+
   async create(user: Account): Promise<Account | null> {
     try {
     const createUser=await AccountModel.create({

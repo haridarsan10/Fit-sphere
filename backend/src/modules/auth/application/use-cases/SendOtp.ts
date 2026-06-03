@@ -43,8 +43,6 @@ export default class SendOtp{
       expiresAt:new Date(Date.now() + 5 * 60 * 1000)
     })
 
-  
-
     await this.otpRepository.save(otp)
    
     await this.otpService.send(user.email,code)
