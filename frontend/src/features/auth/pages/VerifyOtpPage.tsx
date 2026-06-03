@@ -40,7 +40,7 @@ export function VerifyOtpPage() {
   const onSubmit=(data:OtpSchemaType)=>{
     mutate({
     otp: data.otp,
-    email: search.email,
+    ownerId:search.ownerId
      });
   }
 

@@ -19,7 +19,7 @@ export const useRegister=()=>{
 
       navigate({ to: '/verify-otp',
         search:{
-          email:variables.email
+          ownerId:data.data.userId
       }
     })
     },

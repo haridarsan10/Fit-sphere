@@ -50,7 +50,8 @@ export default class Register{
 
     return {
       success:true,
-      message:"User registered successfully"
+      message:"User registered successfully",
+      userId:account.id
     }
    }
 

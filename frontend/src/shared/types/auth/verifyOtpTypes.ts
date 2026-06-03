@@ -1,5 +1,5 @@
 export interface VerifyOtpRequest{
-  email:string,
+  ownerId:string,
   otp:string
 }
 
