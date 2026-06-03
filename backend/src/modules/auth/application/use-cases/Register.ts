@@ -3,7 +3,7 @@ import type AccountRepository from "../../domain/repositories/AccountRepository.
 import type PasswordHasher from "../services/PasswordHasher.js";
 import type { Role } from "../../domain/entities/Account.js";
 import { v4 as uuidv4 } from "uuid";
-
+import SendOtp from "./SendOtp.js";
 
 type RegisterInput={
   firstName:string,
@@ -17,10 +17,12 @@ type RegisterInput={
 export default class Register{
   constructor(
     private accountRepository:AccountRepository,
-    private passHasher:PasswordHasher
+    private passHasher:PasswordHasher,
+    private sendOtp:SendOtp
   ){}
 
    async execute(data:RegisterInput){
+    
     const existingUser=await this.accountRepository.findByEmail(data.email)
 
 
@@ -42,6 +44,9 @@ export default class Register{
 
 
     await this.accountRepository.create(account)
+
+
+    await this.sendOtp.execute(account.email)
 
     return {
       success:true,

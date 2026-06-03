@@ -29,7 +29,11 @@ export default class VerifyOtp{
       throw new Error('Otp not matched!')
     }
 
-    user.activate()
+     user.activate()
+     
+     await this.accountRepository.update(user);
+
+    
     await this.otpRepository.deleteByOwnerId(user.id)
 
      return {

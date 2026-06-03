@@ -12,15 +12,20 @@ export const useRegister=()=>{
 
   return useMutation({
     mutationFn:register,
-    onSuccess:(data)=>{
+    onSuccess:(data,variables)=>{
       console.log("SUCCESS:",data)
-      toast.success('Registration successfull')
-      navigate({ to: '/verify-otp' })
+
+      toast.success('Otp send successfully')
+
+      navigate({ to: '/verify-otp',
+        search:{
+          email:variables.email
+      }
+    })
     },
     onError:(error: AxiosError<any>)=>{
       const message =error?.response?.data?.message || "Something went wrong"
       toast.error(message)
-
     }
   })
 }

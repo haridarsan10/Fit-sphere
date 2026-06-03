@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const AccountSchema=new Schema({
   id:{
-    type:String,required:true
+    type:String,required:true,unique:true
   },
   firstName:{
     type:String,required:true

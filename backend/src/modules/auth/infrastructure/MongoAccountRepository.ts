@@ -53,8 +53,8 @@ export default class MongoAccountRepository implements AccountRepository{
   }
 
   async update(user: Account): Promise<Account | null> {
-    const updateUser=await AccountModel.findByIdAndUpdate(
-      user.id,
+    const updateUser=await AccountModel.findOneAndUpdate(
+      {id:user.id},
      {
       id:user.id,
       firstName:user.firstName,
@@ -63,7 +63,7 @@ export default class MongoAccountRepository implements AccountRepository{
       password:user.password,
       status:user.status,
       role:user.role
-    }, {new:true}
+    }, {returnDocument: 'after'}
     )
    
     return this.toDomain(updateUser)

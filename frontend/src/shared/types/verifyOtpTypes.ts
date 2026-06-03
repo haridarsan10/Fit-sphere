@@ -1,5 +1,6 @@
 export interface VerifyOtpRequest{
-  email:string
+  email:string,
+  otp:string
 }
 
 export interface VerifyOtpResponse{
