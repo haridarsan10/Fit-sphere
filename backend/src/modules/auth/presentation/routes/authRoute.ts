@@ -8,7 +8,7 @@ export default function authRoute(authController:any){
   })
 
   router.post('/login',(req,res)=>{
-    
+    authController.login(req,res)
   })
 
   router.post('/verify-otp',(req,res)=>{
