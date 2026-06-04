@@ -12,7 +12,7 @@ export const useRegister=()=>{
 
   return useMutation({
     mutationFn:register,
-    onSuccess:(data,variables)=>{
+    onSuccess:(data)=>{
       console.log("SUCCESS:",data)
 
       toast.success('Otp send successfully')

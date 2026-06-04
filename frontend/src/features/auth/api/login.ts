@@ -3,6 +3,6 @@ import type { LoginRequest,LoginResponse } from "../../../shared/types/auth/logi
 
 
 export const login=(data:LoginRequest)=>{
-  return apiClient.post<LoginResponse>('/login',data)
+  return apiClient.post<LoginResponse>('/api/auth/login',data)
 }
 

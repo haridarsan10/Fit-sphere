@@ -11,13 +11,15 @@ import MongoAccountRepository from "./modules/auth/infrastructure/MongoAccountRe
 //Use-cases
 import Register from "./modules/auth/application/use-cases/Register.js";
 import VerifyOtp from "./modules/auth/application/use-cases/VerifyOtp.js";
+import Login from "./modules/auth/application/use-cases/Login.js";
+import SendOtp from "./modules/auth/application/use-cases/SendOtp.js";
+
 
 //Services
 import BcryptPasswordHasher from "./infrastructure/services/BcryptPasswordHasher.js";
 import EmailOtpService from "./infrastructure/services/EmailOtpService.js";
 import OtpGeneratorService from "./infrastructure/services/OtpGeneratorService.js";
-import SendOtp from "./modules/auth/application/use-cases/SendOtp.js";
-
+import JwtTokenService from "./infrastructure/services/JwtTokenService.js";
 
 //Controller
 import authController from "./modules/auth/presentation/controller/authController.js";
@@ -43,14 +45,16 @@ const otpRepo=new MongoOtpRepository()
 const passwordHasher=new BcryptPasswordHasher()
 const otpService=new EmailOtpService()
 const otpGenerator=new OtpGeneratorService()
+const tokenService=new JwtTokenService()
 
 //useCases
 const sendOtp=new SendOtp(otpRepo,accRepository,otpService,otpGenerator)
 const registerUsecase=new Register(accRepository,passwordHasher,sendOtp)
 const verifyOtp=new VerifyOtp(accRepository,otpRepo)
+const loginUsecase=new Login(accRepository,passwordHasher,tokenService)
 
 //controller
-const AuthController=new authController(verifyOtp,registerUsecase)
+const AuthController=new authController(verifyOtp,registerUsecase,loginUsecase)
 
 
 app.get("/", (req, res) => {

@@ -8,6 +8,7 @@ export default class JwtTokenService implements TokenService{
   async generate(sub: string, email: string, role: string):Promise<string> {
     
     const token=jwt.sign({sub,email,role},this.secret,{expiresIn:'1h'})
+    
     return token
   }
 

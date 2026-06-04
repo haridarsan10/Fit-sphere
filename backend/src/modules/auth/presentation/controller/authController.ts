@@ -1,10 +1,12 @@
 import VerifyOtp from '../../../auth/application/use-cases/VerifyOtp.js'
 import Register from '../../application/use-cases/Register.js'
+import Login from '../../application/use-cases/Login.js'
 
 export default class authController{
   constructor(
     private verifyOtpCase:VerifyOtp,
-    private registerCase:Register
+    private registerCase:Register,
+    private loginCase:Login
   ){}
 
   async register(req:any,res:any){
@@ -24,7 +26,6 @@ export default class authController{
     
   }
 
-
   async verifyOtp(req:any,res:any){
     try {
       const {ownerId,otp}=req.body
@@ -37,4 +38,18 @@ export default class authController{
       return res.status(400).json({message:error.message})
     }
   }
+
+  async login(req:any,res:any){
+    try {
+      const {email,password}=req.body
+
+      const result=await this.loginCase.execute({email,password})
+
+      return res.status(200).json(result)
+
+    } catch (error:any) {
+      return res.status(400).json({message:error.message})
+    }
+  }
+  
 }
