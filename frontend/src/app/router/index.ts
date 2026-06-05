@@ -24,6 +24,7 @@ const verifyOtpRoute=createRoute({
 })
 
 
+
 const routeTree=rootRoute.addChildren([loginRoute,registerRoute,verifyOtpRoute])
 
 export const router=createRouter({routeTree})
