@@ -59,14 +59,11 @@ const AuthController=new authController(verifyOtp,registerUsecase,loginUsecase)
 
 app.get("/", (req, res) => {
   res.send("Backend running");
-
 });
 
 const PORT = process.env.PORT || 5000;
 
-app.use('/api/auth',authRoute(AuthController))
-
-
+app.use('/api',authRoute(AuthController))
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

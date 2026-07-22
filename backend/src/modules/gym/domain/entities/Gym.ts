@@ -9,7 +9,7 @@ export interface GymProps {
   email: string
   owner_id: string
   status?: GymStatus
-  reject_reason?: string
+  reject_reason?: string | null,
   max_members: number
   max_trainers: number
   created_at?: Date
@@ -43,7 +43,7 @@ export default class Gym{
     email:string,
     owner_id:string,
     status?:GymStatus,
-    reject_reason?:string, 
+    reject_reason?:string | null, 
     max_members:number,
     max_trainers:number,
     created_at?:Date,

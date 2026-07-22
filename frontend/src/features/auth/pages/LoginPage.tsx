@@ -4,18 +4,15 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
 
 
 import { useLogin } from "../hooks/useLogin"
 import { useForm } from "react-hook-form"
-import type { RegisterFormData } from "../schemas/registerSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, type LoginFormData } from "../schemas/loginSchema"
 
@@ -88,7 +85,7 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-6 flex flex-col gap-2">
-              <Button type="submit" className="w-full">
+              <Button disabled={isPending} type="submit" className="w-full">
                 {isPending?"Logging In":"Login"}
               </Button>
 

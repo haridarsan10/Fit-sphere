@@ -1,6 +1,9 @@
 import mongoose, { Schema } from "mongoose";
 
 const GymSchema=new Schema({
+  id:{
+    type:String,required:true,unique:true
+  },
   name:{
     type:String,required:true
   },
@@ -23,7 +26,7 @@ const GymSchema=new Schema({
     type:String,enum:["PENDING","ACTIVE",'SUSPENDED','REJECTED'],default:"PENDING"
   },
   reject_reason:{
-    type:String,required:true
+    type:String,required:false,default:null
   },
   max_members:{
     type:Number,required:true
@@ -32,7 +35,7 @@ const GymSchema=new Schema({
     type:Number,required:true
   },
   created_at:{
-    type:Date,required:true,default:Date.now
+    type:Date,required:false,default:Date.now
   },
   updated_at:{
     type:Date,required:false

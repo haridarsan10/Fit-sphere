@@ -1,8 +1,10 @@
 import AddGym from "../../application/use-cases/AddGym.js";
+import GetGyms from "../../application/use-cases/GetGyms.js";
 
 export default class GymController{
   constructor(
-    private addGymData:AddGym
+    private addGymData:AddGym,
+    private getGymData:GetGyms
   ){}
 
   async addGym(req:any,res:any) {
@@ -26,4 +28,18 @@ export default class GymController{
       return res.status(400).json({message:error.message})
    }
   }
+
+  async getGyms(req:any,res:any){
+    try {
+      const {owner_id}=req.body
+
+      const result =await this.getGymData.execute(owner_id)
+
+      return res.status(200).json(result)
+
+    } catch (error:any) {
+      return res.status(400).json({message:error.message})
+    } 
+  }
+
 }

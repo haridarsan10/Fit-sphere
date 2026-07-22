@@ -4,7 +4,6 @@ import AccountModel from "../../../infrastructure/database/models/AccountModel.j
 
 export default class MongoAccountRepository implements AccountRepository{
 
-
   private toDomain(doc:any):Account{
     return new Account({
       id:doc.id,
