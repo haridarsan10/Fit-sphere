@@ -14,7 +14,6 @@ export default class authController{
 
     const {firstName,lastName,email,password,confirmPassword,role}=req.body
 
-
     const result=await this.registerCase.execute({firstName,lastName,email,password,confirmPassword,role})
 
 

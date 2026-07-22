@@ -29,7 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 export function VerifyOtpPage() {
 
   
-  const {mutate}=useVerifyOtp()
+  const {mutate,isPending}=useVerifyOtp()
   const search=useSearch({from:'/verify-otp'})
 
   const { control,handleSubmit,formState:{errors},}=useForm<OtpSchemaType>(
@@ -86,8 +86,8 @@ export function VerifyOtpPage() {
           </CardContent>
 
           <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full">
-              Verify
+            <Button disabled={isPending} type="submit" className="w-full">
+              {isPending?"Verifying..":"Verify"}
             </Button>
           </CardFooter>
         </form>

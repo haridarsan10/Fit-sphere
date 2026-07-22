@@ -43,7 +43,7 @@ export default class AddGym{
       max_trainers:data.max_trainers
     })
 
-    await this.gymRepository.save(gym)
+    await this.gymRepository.create(gym)
     return {gymId:gym.id}
   } 
 }
