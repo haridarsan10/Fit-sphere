@@ -14,6 +14,6 @@ export default function authRoute(authController:any){
   router.post('/verify-otp',(req,res)=>{
     authController.verifyOtp(req,res)
   })
-
+    
   return router
 }

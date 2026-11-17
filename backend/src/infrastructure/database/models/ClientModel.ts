@@ -13,7 +13,16 @@ const ClientSchema=new Schema({
   trainer_id:{
     type:String,required:false
   },
+  dateOfBirth:{
+    type:Date,required:false
+  },
+  gender:{
+    type:String,required:false
+  },
   fitnessGoal:{
+    type:String,required:false
+  },
+  activityLevel:{
     type:String,required:false
   },
   createdAt: {

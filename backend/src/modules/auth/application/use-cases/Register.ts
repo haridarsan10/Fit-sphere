@@ -42,8 +42,6 @@ export default class Register{
       role:data.role
     })
 
-    console.log('Hello')
-
     await this.accountRepository.create(account)
 
 

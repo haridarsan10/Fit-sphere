@@ -1,194 +1,96 @@
-"use client"
 
-import * as React from "react"
+"use client";
 
-import { NavMain } from "@/components/ui/nav-main"
-import { NavProjects } from "@/components/ui/nav-projects"
-import { NavUser } from "@/components/ui/nav-user"
-import { TeamSwitcher } from "@/components/ui/team-switcher"
+import * as React from "react";
+
+import { NavMain } from "@/components/ui/nav-main";
+import { NavUser } from "@/components/ui/nav-user";
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: (
-        <GalleryVerticalEndIcon
-        />
-      ),
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: (
-        <AudioLinesIcon
-        />
-      ),
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: (
-        <TerminalIcon
-        />
-      ),
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: (
-        <TerminalSquareIcon
-        />
-      ),
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: (
-        <BotIcon
-        />
-      ),
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: (
-        <BookOpenIcon
-        />
-      ),
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: (
-        <FrameIcon
-        />
-      ),
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: (
-        <PieChartIcon
-        />
-      ),
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: (
-        <MapIcon
-        />
-      ),
-    },
-  ],
-}
+import { sidebarConfig } from "@/config/sidebar/sidebar-config";
+import { normalizeRole } from "@/shared/utils/normalize-role";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+// Use your existing authentication utility
+import { getCurrentUser } from "@/shared/utils/jwt";
+import { getToken } from "@/shared/utils/auth";
+
+import type { AppRole } from "@/shared/types/role/role";
+
+type AuthenticatedUser = {
+  name?: string;
+  email?: string;
+  avatar?: string;
+  role?: string;
+};
+
+export function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+
+  // 1. Get currently authenticated user
+  const token= getToken()
+  const currentUser = getCurrentUser(token) as AuthenticatedUser | null;
+
+  // 2. Normalize the user's role
+  const role: AppRole | null = normalizeRole(currentUser?.role);
+
+  // 3. Handle missing or invalid role
+  if (!role) {
+    return null;
+  }
+
+  // 4. Get navigation configuration for that role
+  const roleData = sidebarConfig[role];
+
+  // 5. Prepare user information
+  const user = {
+    name:
+      currentUser?.name ??
+      currentUser?.email?.split("@")[0] ??
+      "User",
+
+    email: currentUser?.email ?? "",
+
+    avatar:
+      currentUser?.avatar ??
+      "/avatars/default.jpg",
+  };
+
   return (
     <Sidebar collapsible="icon" {...props}>
+
+      {/* Sidebar Header */}
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <div className="flex items-center gap-2 px-2 py-2">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            FS
+          </div>
+
+          <span className="font-semibold">
+            FitSphere
+          </span>
+        </div>
       </SidebarHeader>
+
+      {/* Role Based Navigation */}
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={roleData.navMain} />
       </SidebarContent>
+
+      {/* Logged In User */}
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
+
       <SidebarRail />
+
     </Sidebar>
-  )
+  );
 }

@@ -1,3 +1,6 @@
+import { useNavigate } from "@tanstack/react-router";
+import { logout } from "@/shared/utils/auth";
+
 import {
   Avatar,
   AvatarFallback,
@@ -30,6 +33,16 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+
+    navigate({
+      to: "/login",
+      replace: true,
+    });
+  };
 
   return (
     <SidebarMenu>
@@ -96,7 +109,9 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem  
+                onClick={handleLogout}
+                className="cursor-pointer" >
               <LogOutIcon
               />
               Log out

@@ -1,0 +1,1 @@
+export type AppRole = "User" | "Gymowner" | "Trainer";

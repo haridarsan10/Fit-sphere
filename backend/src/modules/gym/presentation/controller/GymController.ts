@@ -1,7 +1,7 @@
 import AddGym from "../../application/use-cases/AddGym.js";
 import GetGyms from "../../application/use-cases/GetGyms.js";
 
-export default class GymController{
+export default class gymController{
   constructor(
     private addGymData:AddGym,
     private getGymData:GetGyms
@@ -9,15 +9,17 @@ export default class GymController{
 
   async addGym(req:any,res:any) {
    try {
-     const {name,description,address,contact_phone,email,owner_id,max_members,max_trainers}=req.body
+     const {name,description,gym_type,address,contact_phone,email,max_members,max_trainers}=req.body
+     const owner_id=req.user.sub
 
     const result=await this.addGymData.execute({
       name,
       description,
+      gym_type,
       address,
       contact_phone,
       email,
-      ownerId:owner_id,
+      owner_id,
       max_members,
       max_trainers
     })
