@@ -1,5 +1,4 @@
 import type GymRepository from "../../domain/repositories/GymRepository.js";
-import Gym from "../../domain/entities/Gym.js";
 
 export default class GetGyms{
   constructor(

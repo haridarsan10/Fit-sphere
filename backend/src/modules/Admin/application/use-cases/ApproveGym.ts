@@ -22,7 +22,7 @@ export default class ApproveGym{
     }
 
     gym.approve()
-    await this.gymRepository.save(gym)
+    await this.gymRepository.create(gym)
 
     return {
       gymId:gym.id

@@ -10,7 +10,10 @@ export default class MongoClientRepository implements ClientRepository{
       account_id:doc.account_id,
       gym_id:doc.gym_id,
       trainer_id:doc.trainer_id,
+      dateOfBirth:doc.dateOfBirth,
+      gender:doc.gender,
       fitnessGoal:doc.fitnessGoal,
+      activityLevel:doc.activityLevel,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt
     })
@@ -24,6 +27,16 @@ export default class MongoClientRepository implements ClientRepository{
     return this.toDomain(doc)
   }
 
+  async findByAccountId(accountId: string): Promise<Client | null> {
+    const doc=await ClientModel.findOne({account_id:accountId})
+
+    if(!doc){
+      return null
+    }
+
+    return this.toDomain(doc)
+  }
+
   async create(client: Client): Promise<Client> {
     try {
 
@@ -32,7 +45,10 @@ export default class MongoClientRepository implements ClientRepository{
         account_id:client.account_id,
         gym_id:client.gym_id,
         trainer_id:client.trainer_id,
+        dateOfBirth:client.dateOfBirth,
+        gender:client.gender,
         fitnessGoal:client.fitnessGoal,
+        activityLevel:client.activityLevel,
         createdAt: client.createdAt,
         updatedAt: client.updatedAt
       })
@@ -52,7 +68,10 @@ export default class MongoClientRepository implements ClientRepository{
         account_id:client.account_id,
         gym_id:client.gym_id,
         trainer_id:client.trainer_id,
+        dateOfBirth:client.dateOfBirth,
+        gender:client.gender,
         fitnessGoal:client.fitnessGoal,
+        activityLevel:client.activityLevel,
         createdAt: client.createdAt,
         updatedAt: client.updatedAt
       },{returnDocument: 'after'}

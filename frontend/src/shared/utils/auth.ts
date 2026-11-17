@@ -19,6 +19,7 @@ export function isAuthenticated(){
 }
 
 export function logout(){
-  localStorage.removeItem('token')
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
 }
 
