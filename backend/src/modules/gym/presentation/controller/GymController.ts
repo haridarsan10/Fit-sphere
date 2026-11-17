@@ -33,8 +33,7 @@ export default class gymController{
 
   async getGyms(req:any,res:any){
     try {
-      const {owner_id}=req.body
-
+      const owner_id=req.user.sub
       const result =await this.getGymData.execute(owner_id)
 
       return res.status(200).json(result)

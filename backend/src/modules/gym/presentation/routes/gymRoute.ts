@@ -10,5 +10,10 @@ export default function gymRoute(gymController:gymController,tokenService: Token
   gymController.addGym(req, res);
   });
 
+  router.get("/", authMiddleware(tokenService), (req: any, res: any) => {
+  gymController.getGyms(req, res);
+  });
+
+
   return router
 }
