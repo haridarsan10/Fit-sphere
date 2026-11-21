@@ -109,7 +109,7 @@ export default function MyGyms() {
 
                     <span
                       className={`rounded-full px-2 py-1 text-xs font-medium ${
-                        gym.status === "APPROVED"
+                        gym.status == "ACTIVE"
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
                       }`}

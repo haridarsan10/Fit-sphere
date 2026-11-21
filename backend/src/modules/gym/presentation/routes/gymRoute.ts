@@ -14,6 +14,13 @@ export default function gymRoute(gymController:gymController,tokenService: Token
   gymController.getGyms(req, res);
   });
 
+  router.get('/:gymId',authMiddleware(tokenService),(req:any,res:any)=>{
+    gymController.getGymById(req,res)
+  })
+
+  router.patch('/:gymId',authMiddleware(tokenService),(req:any,res:any)=>{
+    gymController.updateGym(req,res)
+  })
 
   return router
 }

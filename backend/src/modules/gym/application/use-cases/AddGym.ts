@@ -1,4 +1,3 @@
-import type GymOwnerRepository from "../../../gymOwner/domain/repositories/GymOwnerRepository.js";
 import Gym from "../../domain/entities/Gym.js";
 import type GymRepository from "../../domain/repositories/GymRepository.js";
 import type { GymAddress } from "../../domain/entities/Gym.js";
