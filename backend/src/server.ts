@@ -9,7 +9,7 @@ import gymRoute from "./modules/gym/presentation/routes/gymRoute.js";
 import MongoOtpRepository from "./modules/auth/infrastructure/MongoOtpRepository.js";
 import MongoAccountRepository from "./modules/auth/infrastructure/MongoAccountRepository.js";
 import MongoGymRepository from "./modules/gym/infrastructure/MongoGymRepository.js";
-
+import MongoGymMediaRepository from "./modules/gym/infrastructure/MongoGymMediaRepository.js";
 
 //Use-cases
 import Register from "./modules/auth/application/use-cases/Register.js";
@@ -19,6 +19,8 @@ import SendOtp from "./modules/auth/application/use-cases/SendOtp.js";
 
 import AddGym from "./modules/gym/application/use-cases/AddGym.js";
 import GetGyms from "./modules/gym/application/use-cases/GetGyms.js";
+import GetGymById from "./modules/gym/application/use-cases/GetGymById.js";
+
 
 //Services
 import BcryptPasswordHasher from "./infrastructure/services/BcryptPasswordHasher.js";
@@ -32,6 +34,7 @@ import gymController from "./modules/gym/presentation/controller/GymController.j
 
 //Infrastructure
 import { connectDB } from "./infrastructure/database/connect/MongoConnection.js";
+import UpdateGym from "./modules/gym/application/use-cases/UpdateGym.js";
 
 
 dotenv.config();
@@ -45,7 +48,8 @@ app.use(express.json());
 //repositories
 const accRepository=new MongoAccountRepository()
 const otpRepo=new MongoOtpRepository()
-const gymRepo=new MongoGymRepository()
+const gymMediaRepo=new MongoGymMediaRepository()
+const gymRepo=new MongoGymRepository(gymMediaRepo)
 
 
 //services
@@ -60,12 +64,15 @@ const registerUsecase=new Register(accRepository,passwordHasher,sendOtp)
 const verifyOtp=new VerifyOtp(accRepository,otpRepo)
 const loginUsecase=new Login(accRepository,passwordHasher,tokenService)
 
+
 const addGymUseCase= new AddGym(gymRepo)
 const getGymUseCase= new GetGyms(gymRepo)
+const getGymByIdUseCase=new GetGymById(gymRepo)
+const updateGymUseCase=new UpdateGym(gymRepo)
 
 //controller
 const AuthController=new authController(verifyOtp,registerUsecase,loginUsecase)
-const GymController=new gymController(addGymUseCase,getGymUseCase)
+const GymController=new gymController(addGymUseCase,getGymUseCase,getGymByIdUseCase,updateGymUseCase)
 
 app.get("/", (req, res) => {
   res.send("Backend running");

@@ -120,7 +120,7 @@ export default class Gym {
   public contact: GymContact;
 
   public readonly owner_id: string;
-
+  
   public media: GymMediaCollection;
 
   public facilities: string[];
@@ -325,6 +325,26 @@ export default class Gym {
     this.name = name;
     this.description = description;
     this.gym_type = gym_type;
+
+    this.updated_at = new Date();
+  }
+
+  public updateEstablishedYear(
+    established_year:number
+  ): void {
+
+    if (established_year !== null) {
+      const current_year = new Date().getFullYear();
+
+      if (
+        established_year < 1800 ||
+        established_year > current_year
+      ) {
+        throw new Error("Invalid gym established year.");
+      }
+    }
+
+    this.established_year=established_year
 
     this.updated_at = new Date();
   }
