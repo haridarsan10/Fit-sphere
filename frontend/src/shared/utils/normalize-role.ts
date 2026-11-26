@@ -17,6 +17,9 @@ export function normalizeRole(
     case "trainer":
       return "Trainer";
 
+     case "admin":
+      return "Admin";  
+
     default:
       return null;
   }

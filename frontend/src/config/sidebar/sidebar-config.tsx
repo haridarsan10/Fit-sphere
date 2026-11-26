@@ -148,6 +148,49 @@ export const sidebarConfig = {
     projects: [],
   },
 
+   // ADMIN SIDEBAR
+  Admin: {
+    navMain: [
+      {
+        title: "Dashboard",
+        url: "/admin/dashboard",
+        icon: <LayoutDashboard />,
+      },
+       {
+        title: "Gyms",
+        url: "/gym-owner/gyms",
+        icon: <Building2 />,
+      },
+      {
+        title: "My Clients",
+        url: "/admin/clients",
+        icon: <Users />,
+      },
+      {
+        title: "Workout Plans",
+        url: "/admin/workouts",
+        icon: <Dumbbell />,
+      },
+      {
+        title: "Schedule",
+        url: "/admin/schedule",
+        icon: <CalendarDays />,
+      },
+      {
+        title: "Messages",
+        url: "/admin/messages",
+        icon: <MessageSquare />,
+      },
+      {
+        title: "Profile",
+        url: "/admin/profile",
+        icon: <UserRound />,
+      },
+    ],
+
+    projects: [],
+  },
+
 } satisfies Record<AppRole, {
   navMain: {
     title: string;

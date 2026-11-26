@@ -1,13 +1,10 @@
 import type OtpService from "../../../modules/auth/application/services/OtpService.js";
 import nodemailer from 'nodemailer'
-import dotenv from 'dotenv'
 
 
 export default class EmailOtpService implements OtpService{
   async send(email: string, code: string): Promise<void> {
-
-    dotenv.config()
-
+    
     const mailTransport=nodemailer.createTransport(
       {
         service:'gmail',

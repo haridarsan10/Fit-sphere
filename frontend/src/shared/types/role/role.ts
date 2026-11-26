@@ -1,1 +1,1 @@
-export type AppRole = "User" | "Gymowner" | "Trainer";
+export type AppRole = "User" | "Gymowner" | "Trainer" | "Admin";

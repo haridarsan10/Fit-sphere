@@ -1,5 +1,5 @@
 export type AccountStatus= "PENDING" | "ACTIVE" | "APPROVED";
-export type Role="User" | "Trainer" | "Gymowner"
+export type Role="User" | "Trainer" | "Gymowner" | "Admin"
 
 export default class Account{
     public readonly id: string;

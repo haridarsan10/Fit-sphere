@@ -20,7 +20,7 @@ const AccountSchema=new Schema({
     type:String,enum:["PENDING", "ACTIVE","APPROVED"],default:"PENDING"
   },
   role:{
-    type:String,enum:['User','Gymowner','Trainer']
+    type:String,enum:['User','Gymowner','Trainer','Admin']
   }
 })
 
