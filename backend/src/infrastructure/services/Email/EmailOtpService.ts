@@ -1,4 +1,4 @@
-import type OtpService from "../../modules/auth/application/services/OtpService.js";
+import type OtpService from "../../../modules/auth/application/services/OtpService.js";
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 

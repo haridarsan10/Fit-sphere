@@ -24,6 +24,7 @@ import {
   Image as ImageIcon,
   FileText,
   ArrowLeft
+
 } from "lucide-react";
 
 import { useGetGymById } from "../hooks/useGetGymById";
@@ -76,9 +77,16 @@ export default function GymDetails() {
     navigate({ to: "/gym-owner/gyms" });
   };
 
-  const handleEditGym=()=>{
+  const handleManageGym=()=>{
     navigate({
-      to: "/gym-owner/gyms/edit-gym/$gymId",
+      to: "/gym-owner/gyms/manage-gym/$gymId",
+      params: { gymId },
+    });
+  }
+
+  const handleManageGymMedia=()=>{
+    navigate({
+      to: "/gym-owner/gyms/media/$gymId",
       params: { gymId },
     });
   }
@@ -139,9 +147,16 @@ export default function GymDetails() {
       />
 
       <div className="mt-6 flex justify-end">
-        <Button onClick={handleEditGym}>
-          <PencilIcon className="mr-2 h-4 w-4" />
-          Edit Gym
+        <Button onClick={handleManageGym}>
+          <PencilIcon className="mr-2 h-4 w-2" />
+          Manage Gym
+        </Button>
+      </div>
+
+      <div className="mt-6 flex justify-end">
+        <Button onClick={handleManageGymMedia}>
+          <ImageIcon className="mr-2 h-4 w-2" />
+          Manage Gym Media
         </Button>
       </div>
 

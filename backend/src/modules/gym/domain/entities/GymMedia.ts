@@ -41,7 +41,7 @@ export default class GymMedia {
   public file_size: number | null;
 
   public caption: string | null;
-  public display_order: number;
+  public display_order: number ;
 
   public created_at: Date;
   public updated_at: Date | null;

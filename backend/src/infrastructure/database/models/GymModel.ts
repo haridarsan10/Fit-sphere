@@ -1,6 +1,27 @@
 
 import mongoose, { Schema } from "mongoose";
 
+const DailyOperatingHoursSchema = new Schema(
+  {
+    is_open: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    open: {
+      type: String,
+      default: null,
+    },
+    close: {
+      type: String,
+      default: null,
+    },
+  },
+  { _id: false }
+);
+
+
+
 const GymSchema = new Schema({
   id: {
     type: String,
@@ -16,6 +37,102 @@ const GymSchema = new Schema({
   description: {
     type: String,
     required: true
+  },
+
+  established_year: {
+    type: Number,
+    default: null
+  },
+
+  contact_phone: {
+    type: String,
+    required: true
+  },
+
+  email: {
+    type: String,
+    required: true
+  },
+
+  contact: {
+    alternate_phone: {
+      type: String,
+      default: null,
+    },
+    website: {
+      type: String,
+      default: null,
+    },
+    social_links: {
+      instagram: {
+        type: String,
+        default: null,
+      },
+      facebook: {
+        type: String,
+        default: null,
+      },
+      youtube: {
+        type: String,
+        default: null,
+      },
+    },
+  },
+
+  owner_id: {
+    type: String,
+    required: true
+  },
+
+  facilities: {
+    type: [String],
+    default: [],
+  },
+
+  operating_hours: {
+    monday: {
+      type: DailyOperatingHoursSchema,
+      default: () => ({}),
+    },
+    tuesday: {
+      type: DailyOperatingHoursSchema,
+      default: () => ({}),
+    },
+    wednesday: {
+      type: DailyOperatingHoursSchema,
+      default: () => ({}),
+    },
+    thursday: {
+      type: DailyOperatingHoursSchema,
+      default: () => ({}),
+    },
+    friday: {
+      type: DailyOperatingHoursSchema,
+      default: () => ({}),
+    },
+    saturday: {
+      type: DailyOperatingHoursSchema,
+      default: () => ({}),
+    },
+    sunday: {
+      type: DailyOperatingHoursSchema,
+      default: () => ({}),
+    },
+  },
+
+  business_details: {
+    legal_name: {
+      type: String,
+      default: null,
+    },
+    gstin: {
+      type: String,
+      default: null,
+    },
+    registration_number: {
+      type: String,
+      default: null,
+    },
   },
 
   gym_type: {
@@ -62,24 +179,9 @@ const GymSchema = new Schema({
     }
   },
 
-  contact_phone: {
-    type: String,
-    required: true
-  },
-
-  email: {
-    type: String,
-    required: true
-  },
-
-  owner_id: {
-    type: String,
-    required: true
-  },
-
   status: {
     type: String,
-    enum: ["PENDING", "ACTIVE", "SUSPENDED", "REJECTED"],
+    enum: ["DRAFT","PENDING", "ACTIVE", "SUSPENDED", "REJECTED"],
     default: "PENDING"
   },
 

@@ -1,15 +1,15 @@
 import Gym from "../domain/entities/Gym.js";
-import type GymRepository from "../domain/repositories/GymRepository.js"; 
+import type GymRepository from "../domain/repositories/GymRepository.js";
 import GymModel from "../../../infrastructure/database/models/GymModel.js";
 import type GymMediaRepository from "../domain/repositories/GymMediaRepository.js";
 
-export default class MongoGymRepository implements GymRepository{
+export default class MongoGymRepository implements GymRepository {
 
   constructor(
-    private readonly gymMediaRepo:GymMediaRepository
-  ){}
+    private readonly gymMediaRepo: GymMediaRepository
+  ) { }
 
-  private async getMediaCollection(gymId:string){
+  private async getMediaCollection(gymId: string) {
     const media = await this.gymMediaRepo.findByGymId(gymId)
 
     return {
@@ -26,14 +26,14 @@ export default class MongoGymRepository implements GymRepository{
 
   private async toDomain(doc: any): Promise<Gym> {
 
-    const media=await this.getMediaCollection(doc.id)
+    const media = await this.getMediaCollection(doc.id)
 
     return new Gym({
       id: doc.id,
       name: doc.name,
       description: doc.description,
       gym_type: doc.gym_type,
-      established_year : doc.established_year ?? null,
+      established_year: doc.established_year ?? null,
 
       address: {
         address_line_1: doc.address.address_line_1,
@@ -52,12 +52,12 @@ export default class MongoGymRepository implements GymRepository{
 
       owner_id: doc.owner_id,
 
-      media:media,
+      media: media,
 
-      facilities : doc.facilities ?? [],
-      operating_hours : doc.operating_hours ?? null,
+      facilities: doc.facilities ?? [],
+      operating_hours: doc.operating_hours ?? null,
 
-      business_details : doc.business_details ?? null,
+      business_details: doc.business_details ?? null,
 
       status: doc.status,
       reject_reason: doc.reject_reason,
@@ -73,11 +73,11 @@ export default class MongoGymRepository implements GymRepository{
 
 
   async findById(gymId: string): Promise<Gym | null> {
-    const doc=await GymModel.findOne({id:gymId})
+    const doc = await GymModel.findOne({ id: gymId })
 
-    if(!doc) return null
+    if (!doc) return null
 
-    const gymData=await this.toDomain(doc)
+    const gymData = await this.toDomain(doc)
 
     if (doc.updated_at) {
       gymData.updated_at = new Date(doc.updated_at)
@@ -92,7 +92,7 @@ export default class MongoGymRepository implements GymRepository{
 
   async update(gym: Gym): Promise<Gym | null> {
     const updatedGym = await GymModel.findOneAndUpdate(
-      {id:gym.id},
+      { id: gym.id },
       {
         name: gym.name,
         description: gym.description,
@@ -104,8 +104,6 @@ export default class MongoGymRepository implements GymRepository{
         contact_phone: gym.contact_phone,
         email: gym.email,
         contact: gym.contact,
-
-        media: gym.media,
 
         facilities: gym.facilities,
         operating_hours: gym.operating_hours,
@@ -143,6 +141,12 @@ export default class MongoGymRepository implements GymRepository{
       email: gym.email,
 
       owner_id: gym.owner_id,
+
+      established_year: gym.established_year,
+      contact: gym.contact,
+      facilities: gym.facilities,
+      operating_hours: gym.operating_hours,
+      business_details: gym.business_details,
 
       status: gym.status,
       reject_reason: gym.reject_reason,

@@ -13,18 +13,25 @@ export default class gymController{
 
   async addGym(req:any,res:any) {
    try {
-     const {name,description,gym_type,address,contact_phone,email,max_members,max_trainers}=req.body
+
+     const {name,description,gym_type,address,contact_phone,established_year,email,contact,facilities,operating_hours,business_details,max_members,max_trainers}=req.body
+
      const owner_id=req.user.sub
 
     const result=await this.addGymUseCase.execute({
       name,
       description,
+      established_year,
       gym_type,
       address,
       contact_phone,
       email,
       owner_id,
       max_members,
+      contact,
+      facilities,
+      operating_hours
+      ,business_details,
       max_trainers
     })
 

@@ -4,7 +4,8 @@ import { gymOwnerDashboard } from "@/app/router/gymOwner/gymOwnerDashboard";
 import { gymOwnerMyGymsRoute } from "@/app/router/gymOwner/gymOwnerMyGyms";
 import { gymOwnerAddGymRoute } from "./gymOwnerAddGym";
 import { gymOwnerGymDetailsRoute } from "./gymOwnerGymDetailsRoute";
-import { gymOwnerEditGymRoute } from "./gymOwnerEditGymRoute";
+import { gymOwnerManageGymRoute } from "./gymOwnerManageGymRoute";
+import { gymOwnerManageGymMediaRoute } from "./gymOwnerManageGymMediaRoute";
 
 export const gymOwner_routes = gymOwnerRoute.addChildren([
   gymOwnerLayoutRoute.addChildren([
@@ -12,6 +13,7 @@ export const gymOwner_routes = gymOwnerRoute.addChildren([
     gymOwnerMyGymsRoute,
     gymOwnerAddGymRoute,
     gymOwnerGymDetailsRoute,
-    gymOwnerEditGymRoute
+    gymOwnerManageGymRoute,
+    gymOwnerManageGymMediaRoute
   ]),
 ]);

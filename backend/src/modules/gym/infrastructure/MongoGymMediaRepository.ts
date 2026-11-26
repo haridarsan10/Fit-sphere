@@ -18,9 +18,6 @@ export default class MongoGymMediaRepository implements GymMediaRepository {
       file_size: doc.file_size,
       caption: doc.caption,
       display_order: doc.display_order,
-      created_at: doc.created_at,
-      updated_at: doc.updated_at,
-      deleted_at: doc.deleted_at,
     });
   }
 
@@ -36,7 +33,6 @@ export default class MongoGymMediaRepository implements GymMediaRepository {
       file_size: media.file_size,
       caption: media.caption,
       display_order: media.display_order,
-      deleted_at: media.deleted_at,
     });
 
     return this.toDomain(createdGymMedia);
@@ -92,6 +88,7 @@ export default class MongoGymMediaRepository implements GymMediaRepository {
           file_size: media.file_size,
           caption: media.caption,
           display_order: media.display_order,
+          updated_at: new Date(),
         },
       },
       {
