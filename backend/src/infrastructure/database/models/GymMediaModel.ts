@@ -77,10 +77,10 @@ const GymMediaSchema = new Schema({
       type: Date,
       default: null
     },
-  },{ timestamps: true }
+  } 
 );
 
-GymMediaSchema.index({ gym_id: 1, type: 1 });
+GymMediaSchema.index({ gym_id: 1, type: 1, deleted_at: 1 });
 
 const GymMediaModel = mongoose.model("GymMedia", GymMediaSchema);
 

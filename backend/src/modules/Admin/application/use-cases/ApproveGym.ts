@@ -1,31 +1,29 @@
-import type GymRepository from "../../../gym/domain/repositories/GymRepository.js"
+import type GymRepository from "../../../gym/domain/repositories/GymRepository.js";
 
-type ApproveGymInput={
-  gymId:string
-}
+export type ApproveGymInput = {
+  gym_id: string;
+};
 
-
-export default class ApproveGym{
+export default class ApproveGym {
   constructor(
-    private gymRepository:GymRepository
-  ){}
+    private gymRepo: GymRepository
+  ) {}
 
-  async execute(data:ApproveGymInput){
-    const gym=await this.gymRepository.findById(data.gymId)
+  async execute(data: ApproveGymInput) {
+     const gym=await this.gymRepo.findById(data.gym_id)
 
     if(!gym){
-      throw new Error('Gym not found!')
+      throw new Error('Gym does not exist')
     }
 
-    if(gym.isActive()){
-      throw new Error('Gym is Active!')
+    if (!gym.isPending()) {
+      throw new Error("Only pending gyms can be approved");
     }
 
-    gym.approve()
-    await this.gymRepository.create(gym)
+    gym.approve();
 
-    return {
-      gymId:gym.id
-    }
+    const updatedGym = await this.gymRepo.update(gym)
+
+    return updatedGym
   }
 }

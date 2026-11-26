@@ -1,6 +1,7 @@
 import GymMedia from "./GymMedia.js";
 
 export type GymStatus =
+  | "DRAFT"
   | "PENDING"
   | "ACTIVE"
   | "SUSPENDED"
@@ -167,7 +168,7 @@ export default class Gym {
 
     this.business_details = params.business_details ?? null;
 
-    this.status = params.status ?? "PENDING";
+    this.status = params.status ?? "DRAFT";
     this.reject_reason = params.reject_reason ?? null;
 
     this.max_members = params.max_members;
@@ -180,12 +181,17 @@ export default class Gym {
     this.validate();
   }
 
+  
+  // =========================
+  // VALIDATION
+  // =========================
+
   private validate(): void {
-    if (!this.id) {
+    if (!this.id?.trim()) {
       throw new Error("Gym ID is required.");
     }
 
-    if (!this.owner_id) {
+    if (!this.owner_id?.trim()) {
       throw new Error("Gym owner ID is required.");
     }
 
@@ -193,19 +199,13 @@ export default class Gym {
       throw new Error("Gym name must contain at least 3 characters.");
     }
 
-    if (!this.description || !this.description.trim()) {
+    if (!this.description?.trim()) {
       throw new Error("Gym description is required.");
     }
 
-    if (!this.address?.address_line_1 ||
-        !this.address?.city ||
-        !this.address?.state ||
-        !this.address?.country ||
-        !this.address?.pincode) {
-      throw new Error("Complete gym address is required.");
-    }
+    this.validateAddress(this.address);
 
-    if (!this.contact_phone || !this.email) {
+    if (!this.contact_phone?.trim() || !this.email?.trim()) {
       throw new Error("Gym contact information is required.");
     }
 
@@ -213,6 +213,7 @@ export default class Gym {
       const current_year = new Date().getFullYear();
 
       if (
+        !Number.isInteger(this.established_year) ||
         this.established_year < 1800 ||
         this.established_year > current_year
       ) {
@@ -220,11 +221,28 @@ export default class Gym {
       }
     }
 
-    if (this.max_members < 0 || this.max_trainers < 0) {
-      throw new Error("Gym capacity cannot be negative.");
+    if (
+      !Number.isInteger(this.max_members) ||
+      !Number.isInteger(this.max_trainers) ||
+      this.max_members < 0 ||
+      this.max_trainers < 0
+    ) {
+      throw new Error("Gym capacity must be non-negative integers.");
     }
 
     this.validateMediaOwnership();
+  }
+
+  private validateAddress(address: GymAddress): void {
+    if (
+      !address?.address_line_1?.trim() ||
+      !address?.city?.trim() ||
+      !address?.state?.trim() ||
+      !address?.country?.trim() ||
+      !address?.pincode?.trim()
+    ) {
+      throw new Error("Complete gym address is required.");
+    }
   }
 
   private validateMediaOwnership(): void {
@@ -243,7 +261,19 @@ export default class Gym {
     }
   }
 
-  // Status methods
+  // =========================
+  // DELETED GYM PROTECTION
+  // =========================
+
+  private ensureNotDeleted(): void {
+    if (this.isDeleted()) {
+      throw new Error("Cannot perform operations on a deleted gym.");
+    }
+  }
+
+  // =========================
+  // STATUS CHECKS
+  // =========================
 
   public isActive(): boolean {
     return this.status === "ACTIVE";
@@ -251,6 +281,10 @@ export default class Gym {
 
   public isPending(): boolean {
     return this.status === "PENDING";
+  }
+
+  public isDraft(): boolean {
+    return this.status === "DRAFT";
   }
 
   public isSuspended(): boolean {
@@ -261,12 +295,95 @@ export default class Gym {
     return this.status === "REJECTED";
   }
 
-  public approve(): void {
-    if (this.status === "ACTIVE") {
-      throw new Error("Gym is already active.");
+  // =========================
+  // PROFILE COMPLETION
+  // =========================
+
+  public calculateProfileCompletion(): number {
+    const checks = [
+      this.name.trim().length >= 3,
+      !!this.description.trim(),
+      !!this.gym_type.trim(),
+
+      !!this.address.address_line_1?.trim(),
+      !!this.address.city?.trim(),
+      !!this.address.state?.trim(),
+      !!this.address.country?.trim(),
+      !!this.address.pincode?.trim(),
+
+      !!this.contact_phone.trim(),
+      !!this.email.trim(),
+
+      this.isOperatingHoursComplete(),
+      this.facilities.length > 0,
+
+      this.media.logo !== null,
+      this.media.cover_image !== null,
+      this.media.verification_documents.length > 0,
+    ];
+
+    const completed = checks.filter(Boolean).length;
+
+    return Math.round((completed / checks.length) * 100);
+  }
+
+  public isProfileComplete(): boolean {
+    return this.calculateProfileCompletion() === 100;
+  }
+
+  private isOperatingHoursComplete(): boolean {
+    if (!this.operating_hours) {
+      return false;
     }
 
-    if (this.status !== "PENDING") {
+    const days = Object.values(this.operating_hours);
+
+    return days.length === 7 && days.every((day) => {
+      if (day.is_open) {
+        return !!day.open?.trim() && !!day.close?.trim();
+      }
+
+      return true;
+    });
+  }
+
+  // =========================
+  // STATUS TRANSITIONS
+  // =========================
+
+  public submitForApproval(): void {
+    this.ensureNotDeleted();
+
+    if (!this.isDraft()) {
+      throw new Error("Only draft gyms can be submitted for approval.");
+    }
+
+    if (!this.isProfileComplete()) {
+      throw new Error(
+        `Gym profile is incomplete. Current completion: ${this.calculateProfileCompletion()}%.`
+      );
+    }
+
+    this.status = "PENDING";
+    this.updated_at = new Date();
+  }
+
+  public reviseRejectedGym(): void {
+    this.ensureNotDeleted();
+
+    if (!this.isRejected()) {
+      throw new Error("Only rejected gyms can be revised.");
+    }
+
+    this.status = "DRAFT";
+    this.reject_reason = null;
+    this.updated_at = new Date();
+  }
+
+  public approve(): void {
+    this.ensureNotDeleted();
+
+    if (!this.isPending()) {
       throw new Error("Only pending gyms can be approved.");
     }
 
@@ -276,21 +393,25 @@ export default class Gym {
   }
 
   public reject(reason: string): void {
-    if (this.status !== "PENDING") {
+    this.ensureNotDeleted();
+
+    if (!this.isPending()) {
       throw new Error("Only pending gyms can be rejected.");
     }
 
-    if (!reason.trim()) {
+    if (!reason?.trim()) {
       throw new Error("Rejection reason is required.");
     }
 
     this.status = "REJECTED";
-    this.reject_reason = reason;
+    this.reject_reason = reason.trim();
     this.updated_at = new Date();
   }
 
   public suspend(): void {
-    if (this.status !== "ACTIVE") {
+    this.ensureNotDeleted();
+
+    if (!this.isActive()) {
       throw new Error("Only active gyms can be suspended.");
     }
 
@@ -299,7 +420,9 @@ export default class Gym {
   }
 
   public reactivate(): void {
-    if (this.status !== "SUSPENDED") {
+    this.ensureNotDeleted();
+
+    if (!this.isSuspended()) {
       throw new Error("Only suspended gyms can be reactivated.");
     }
 
@@ -307,36 +430,46 @@ export default class Gym {
     this.updated_at = new Date();
   }
 
-  // Gym information methods
+  // =========================
+  // BASIC INFORMATION
+  // =========================
 
   public updateBasicInformation(
     name: string,
     description: string,
     gym_type: string
   ): void {
-    if (!name || name.trim().length < 3) {
+    this.ensureNotDeleted();
+
+    if (!name?.trim() || name.trim().length < 3) {
       throw new Error("Gym name must contain at least 3 characters.");
     }
 
-    if (!description.trim()) {
+    if (!description?.trim()) {
       throw new Error("Gym description is required.");
     }
 
-    this.name = name;
-    this.description = description;
-    this.gym_type = gym_type;
+    if (!gym_type?.trim()) {
+      throw new Error("Gym type is required.");
+    }
+
+    this.name = name.trim();
+    this.description = description.trim();
+    this.gym_type = gym_type.trim();
 
     this.updated_at = new Date();
   }
 
   public updateEstablishedYear(
-    established_year:number
+    established_year: number | null
   ): void {
+    this.ensureNotDeleted();
 
     if (established_year !== null) {
       const current_year = new Date().getFullYear();
 
       if (
+        !Number.isInteger(established_year) ||
         established_year < 1800 ||
         established_year > current_year
       ) {
@@ -344,21 +477,13 @@ export default class Gym {
       }
     }
 
-    this.established_year=established_year
-
+    this.established_year = established_year;
     this.updated_at = new Date();
   }
 
   public updateAddress(address: GymAddress): void {
-    if (
-      !address.address_line_1 ||
-      !address.city ||
-      !address.state ||
-      !address.country ||
-      !address.pincode
-    ) {
-      throw new Error("Complete gym address is required.");
-    }
+    this.ensureNotDeleted();
+    this.validateAddress(address);
 
     this.address = address;
     this.updated_at = new Date();
@@ -369,40 +494,111 @@ export default class Gym {
     email: string,
     contact: GymContact
   ): void {
-    if (!contact_phone || !email) {
+    this.ensureNotDeleted();
+
+    if (!contact_phone?.trim() || !email?.trim()) {
       throw new Error("Phone number and email are required.");
     }
 
-    this.contact_phone = contact_phone;
-    this.email = email;
+    this.contact_phone = contact_phone.trim();
+    this.email = email.trim();
     this.contact = contact;
 
     this.updated_at = new Date();
   }
 
+  // =========================
+  // FACILITIES
+  // =========================
+
   public updateFacilities(facilities: string[]): void {
-    this.facilities = [...new Set(facilities)];
+    this.ensureNotDeleted();
+
+    if (!Array.isArray(facilities)) {
+      throw new Error("Facilities must be an array.");
+    }
+
+    this.facilities = [
+      ...new Set(
+        facilities
+          .filter((facility) => typeof facility === "string")
+          .map((facility) => facility.trim())
+          .filter(Boolean)
+      ),
+    ];
+
     this.updated_at = new Date();
   }
 
+  // =========================
+  // OPERATING HOURS
+  // =========================
+
   public updateOperatingHours(hours: GymOperatingHours): void {
+    this.ensureNotDeleted();
+
+    const days = Object.values(hours);
+
+    if (days.length !== 7) {
+      throw new Error("Operating hours must contain all seven days.");
+    }
+
+    for (const day of days) {
+      if (typeof day.is_open !== "boolean") {
+        throw new Error("Invalid operating day configuration.");
+      }
+
+      if (day.is_open) {
+        if (!day.open || !day.close) {
+          throw new Error("Opening and closing times are required.");
+        }
+
+        const time_pattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+        if (
+          !time_pattern.test(day.open) ||
+          !time_pattern.test(day.close) ||
+          day.open === day.close
+        ) {
+          throw new Error("Invalid operating hours.");
+        }
+      }
+    }
+
     this.operating_hours = hours;
     this.updated_at = new Date();
   }
 
+  // =========================
+  // BUSINESS DETAILS
+  // =========================
+
   public updateBusinessDetails(
     details: GymBusinessDetails
   ): void {
+    this.ensureNotDeleted();
+
     this.business_details = details;
     this.updated_at = new Date();
   }
+
+  // =========================
+  // CAPACITY
+  // =========================
 
   public updateCapacity(
     max_members: number,
     max_trainers: number
   ): void {
-    if (max_members < 0 || max_trainers < 0) {
-      throw new Error("Gym capacity cannot be negative.");
+    this.ensureNotDeleted();
+
+    if (
+      !Number.isInteger(max_members) ||
+      !Number.isInteger(max_trainers) ||
+      max_members < 0 ||
+      max_trainers < 0
+    ) {
+      throw new Error("Gym capacity must be non-negative integers.");
     }
 
     this.max_members = max_members;
@@ -411,15 +607,31 @@ export default class Gym {
     this.updated_at = new Date();
   }
 
-  // Media methods
+  // =========================
+  // MEDIA
+  // =========================
 
   public addMedia(media: GymMedia): void {
+    this.ensureNotDeleted();
+
     if (media.gym_id !== this.id) {
       throw new Error("Media does not belong to this gym.");
     }
 
     if (media.isDeleted()) {
       throw new Error("Deleted media cannot be added.");
+    }
+
+    const all_media = [
+      this.media.logo,
+      this.media.cover_image,
+      ...this.media.gallery,
+      ...this.media.facility_images,
+      ...this.media.verification_documents,
+    ];
+
+    if (all_media.some((item) => item?.id === media.id)) {
+      throw new Error("Media is already attached to this gym.");
     }
 
     switch (media.type) {
@@ -448,6 +660,8 @@ export default class Gym {
   }
 
   public removeMedia(media_id: string): void {
+    this.ensureNotDeleted();
+
     const collections = [
       this.media.logo,
       this.media.cover_image,
@@ -490,7 +704,9 @@ export default class Gym {
     this.updated_at = new Date();
   }
 
-  // Soft deletion
+  // =========================
+  // SOFT DELETION
+  // =========================
 
   public isDeleted(): boolean {
     return this.deleted_at !== null;
@@ -504,4 +720,5 @@ export default class Gym {
     this.deleted_at = new Date();
     this.updated_at = new Date();
   }
+
 }

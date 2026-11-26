@@ -1,6 +1,6 @@
-import type TokenService from "../../modules/auth/application/services/TokenService.js";
+import type TokenService from "../../../modules/auth/application/services/TokenService.js";
 import jwt,{ type JwtPayload } from 'jsonwebtoken'
-import type {TokenPayload} from "../../modules/auth/application/services/TokenService.js" 
+import type {TokenPayload} from "../../../modules/auth/application/services/TokenService.js" 
 
 export default class JwtTokenService implements TokenService{
   private secret='your_secret_key'

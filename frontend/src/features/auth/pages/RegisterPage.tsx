@@ -29,7 +29,7 @@ import { Label } from "@/components/ui/label"
 
 export default function RegisterPage(){
 
-  const roles=["User","Gymowner","Trainer"] as const
+  const roles=["User","Gymowner","Trainer","Admin"] as const
 
   const {mutate,isPending}=useRegister()
 

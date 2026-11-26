@@ -16,7 +16,7 @@ export interface LoginResponse{
 export interface JwtPayload {
   sub: string;
   email: string;
-  role: "User" | "Gymowner" | "Trainer"
+  role: "User" | "Gymowner" | "Trainer" | "Admin"
   iat: number;
   exp: number;
 }

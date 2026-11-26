@@ -5,8 +5,12 @@ import authRoleMiddleware from "../../../auth/presentation/middleware/authRoleMi
 export default function adminRoute(adminController:any){
   const router=express.Router()
 
-  router.post('/approveGym',authMiddleware,authRoleMiddleware('ADMIN'),(req:any,res:any)=>{
-   adminController.approveGym(req,res)
+  router.patch('/gyms/:gymId/approve',authMiddleware,authRoleMiddleware('ADMIN'),(req:any,res:any)=>{
+   adminController.ApproveGym(req,res)
+  })
+
+  router.post('/gyms/:gymId/reject',authMiddleware,authRoleMiddleware('ADMIN'),(req:any,res:any)=>{
+   adminController.RejectGym(req,res)
   })
 
   return router

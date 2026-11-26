@@ -12,7 +12,7 @@ export const registerSchema=z.object({
   .regex(/[0-9]/, "Must include a number"),
 
   confirmPassword:z.string(),
-  role:z.enum(["User","Gymowner","Trainer"])
+  role:z.enum(["User","Gymowner","Trainer","Admin"])
 })
 .refine((data)=>data.password===data.confirmPassword,{
   message:"Password do not match",

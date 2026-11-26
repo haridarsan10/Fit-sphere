@@ -38,6 +38,7 @@ export function AppSidebar({
   const token= getToken()
   const currentUser = getCurrentUser(token) as AuthenticatedUser | null;
 
+
   // 2. Normalize the user's role
   const role: AppRole | null = normalizeRole(currentUser?.role);
 
